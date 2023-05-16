@@ -4,7 +4,7 @@ import net.minecraft.util.Mth;
 import java.util.Random;
 import net.minecraft.world.phys.Vec3;
 import org.apache.commons.lang3.Range;
-import org.joml.Matrix4f;
+import com.mojang.math.Matrix4f;
 import org.lwjgl.BufferUtils;
 
 import java.nio.FloatBuffer;
@@ -32,7 +32,7 @@ public class Mathematic {
 
     public static Vec3 simpleMatrixToVec3(Matrix4f matrix4f) {
         FloatBuffer buffer = BufferUtils.createFloatBuffer(16);
-        matrix4f.get(buffer);
+        matrix4f.storeTransposed(buffer);
 
         Vec3 vec3 = new Vec3(buffer.get(3), buffer.get(7), buffer.get(11));
 

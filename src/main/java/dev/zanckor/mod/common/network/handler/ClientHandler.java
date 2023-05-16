@@ -46,7 +46,7 @@ public class ClientHandler {
 
         SystemToast.add(Minecraft.getInstance().getToasts(), SystemToast.SystemToastIds.PERIODIC_NOTIFICATION, new TextComponent("Quest Completed"), new TextComponent(title));
 
-        MCUtilClient.playSound(SoundEvents.NOTE_BLOCK_PLING.get(), 1, 2);
+        MCUtilClient.playSound(SoundEvents.NOTE_BLOCK_PLING, 1, 2);
     }
 
     public static void displayDialog(String dialogIdentifier, int dialogID, String text, int optionSize, HashMap<Integer, List<Integer>> optionIntegers, HashMap<Integer, List<String>> optionStrings, UUID npc) {
@@ -117,7 +117,7 @@ public class ClientHandler {
         for (String entityTypeString : entityTypeForQuest) {
             ResourceLocation entityResourceLocation = new ResourceLocation(entityTypeString.strip());
 
-            EntityType entityType = ForgeRegistries.ENTITY_TYPES.getValue(entityResourceLocation);
+            EntityType entityType = ForgeRegistries.ENTITIES.getValue(entityResourceLocation);
 
             availableEntityTypeForQuest.add(entityType);
         }

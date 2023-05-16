@@ -4,6 +4,9 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
+
 import dev.zanckor.mod.QuestApiMain;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -17,23 +20,23 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.sounds.SoundManager;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
-import net.minecraft.util.Random;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.level.levelgen.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.common.Mod;
-import org.joml.Quaternionf;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import static net.minecraft.client.gui.components.Button.*;
@@ -58,7 +61,7 @@ public class MCUtilClient {
     public static void playSound(SoundEvent sound, float minPitch, float maxPitch) {
         SoundManager soundManager = Minecraft.getInstance().getSoundManager();
 
-        soundManager.play(SimpleSoundInstance.forUI(sound, Mth.randomBetween(Random.create(), minPitch, maxPitch)));
+        soundManager.play(SimpleSoundInstance.forUI(sound, Mth.randomBetween(new Random(), minPitch, maxPitch)));
     }
 
     public static void renderLine(PoseStack poseStack, float xPos, float yPos, float textIndent, String text, Font font) {
@@ -216,7 +219,7 @@ public class MCUtilClient {
         PoseStack posestack1 = new PoseStack();
         posestack1.translate(0.0D, 0.0D, 1000.0D);
         posestack1.scale((float) size, (float) size, (float) size);
-        Quaternionf quaternion = new Quaternionf().rotateZ((float) Math.toRadians(180));
+        Quaternion quaternion = Vector3f.ZP.rotationDegrees(180.0F);
         posestack1.mulPose(quaternion);
         float f2 = entity.yBodyRot;
         float f3 = entity.getYRot();
@@ -250,7 +253,7 @@ public class MCUtilClient {
     public static void renderEntity(double xPos, double yPos, double size, double rotation, LivingEntity entity, PoseStack poseStack) {
         PoseStack posestack = RenderSystem.getModelViewStack();
         posestack.pushPose();
-        posestack.last().pose().mul(poseStack.last().pose());
+        posestack.last().pose().multiply(poseStack.last().pose());
 
         posestack.translate(xPos, yPos, 1050.0D);
         posestack.scale(1.0F, 1.0F, -1.0F);
@@ -260,7 +263,9 @@ public class MCUtilClient {
 
         posestack1.translate(0.0D, 0.0D, 1000.0D);
         posestack1.scale((float) size, (float) size, (float) size);
-        posestack1.mulPose(new Quaternionf().rotateXYZ((float) Math.toRadians(rotation), (float) Math.toRadians(90), (float) Math.toRadians(180)));
+        posestack1.mulPose(new Quaternion(Vector3f.ZP.rotationDegrees(180.0F)));
+        posestack1.mulPose(new Quaternion(Vector3f.YP.rotationDegrees(90.0F)));
+        posestack1.mulPose(new Quaternion((float) rotation, 0,0, true));
 
         float f2 = entity.yBodyRot;
         float f3 = entity.getYRot();
@@ -296,7 +301,7 @@ public class MCUtilClient {
 
     public static void renderItem(ItemStack itemStack, int xPos, int yPos, double size, double rotation, PoseStack poseStack) {
         BakedModel model = Minecraft.getInstance().getItemRenderer().getModel(itemStack, null, null, 0);
-        Quaternionf quaternion = new Quaternionf().rotateZ((float) Math.toRadians(rotation * 10));
+        Quaternion quaternion = new Quaternion(0, 0, (float) rotation * 10, true);
 
         Minecraft.getInstance().textureManager.getTexture(TextureAtlas.LOCATION_BLOCKS).setFilter(false, false);
         RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
@@ -306,7 +311,7 @@ public class MCUtilClient {
 
         PoseStack posestack = RenderSystem.getModelViewStack();
         posestack.pushPose();
-        posestack.last().pose().mul(poseStack.last().pose());
+        posestack.last().pose().multiply(poseStack.last().pose());
 
         posestack.translate(xPos, yPos, 0);
 
@@ -321,7 +326,7 @@ public class MCUtilClient {
         MultiBufferSource.BufferSource multibuffersource$buffersource = Minecraft.getInstance().renderBuffers().bufferSource();
         Lighting.setupForFlatItems();
 
-        Minecraft.getInstance().getItemRenderer().render(itemStack, ItemDisplayContext.GUI, false, new PoseStack(), multibuffersource$buffersource, 15728880, OverlayTexture.NO_OVERLAY, model);
+        Minecraft.getInstance().getItemRenderer().render(itemStack, ItemTransforms.TransformType.GUI, false, new PoseStack(), multibuffersource$buffersource, 15728880, OverlayTexture.NO_OVERLAY, model);
         multibuffersource$buffersource.endBatch();
         RenderSystem.enableDepthTest();
         Lighting.setupFor3DItems();
@@ -331,11 +336,7 @@ public class MCUtilClient {
     }
 
     public static Button createButton(int xPos, int yPos, int width, int height, Component component, OnPress onPress){
-        Button button = builder(component, onPress).build();
-
-        button.setPosition(xPos, yPos);
-        button.setWidth(width);
-        button.setHeight(height);
+        Button button = new Button(xPos, yPos, width, height, component, onPress);
 
         return button;
     }

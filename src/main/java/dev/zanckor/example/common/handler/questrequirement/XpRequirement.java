@@ -29,9 +29,9 @@ public class XpRequirement extends AbstractQuestRequirement {
         boolean hasReqs = player.experienceLevel >= requirement.getRequirements_min() && player.experienceLevel <= requirement.getRequirements_max();
 
         if (!hasReqs) {
-            player.sendSystemMessage(new TextComponent("Player " + player.getScoreboardName() + " doesn't have the requirements to access to this quest"));
-            player.sendSystemMessage(new TextComponent("Minimum: " + requirement.getRequirements_min()));
-            player.sendSystemMessage(new TextComponent("Maximum: " + requirement.getRequirements_max()));
+            player.sendMessage(new TextComponent("Player " + player.getScoreboardName() + " doesn't have the requirements to access to this quest"), player.getUUID());
+            player.sendMessage(new TextComponent("Minimum: " + requirement.getRequirements_min()), player.getUUID());
+            player.sendMessage(new TextComponent("Maximum: " + requirement.getRequirements_max()), player.getUUID());
         }
 
         return hasReqs;

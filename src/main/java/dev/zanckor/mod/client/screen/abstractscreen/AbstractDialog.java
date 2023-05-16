@@ -1,7 +1,7 @@
 package dev.zanckor.mod.client.screen.abstractscreen;
 
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 
 import java.util.HashMap;
 import java.util.List;

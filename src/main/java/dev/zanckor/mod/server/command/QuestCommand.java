@@ -146,7 +146,7 @@ public class QuestCommand {
             player = context.getSource().getPlayerOrException();
         } catch (CommandSyntaxException e) {}
         SendQuestPacket.TO_CLIENT(player, new ServerQuestList());
-        NetworkHooks.openScreen(player, menuProvider);
+        NetworkHooks.openGui(player, menuProvider);
         return 1;
     }
 }
