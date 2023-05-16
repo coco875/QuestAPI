@@ -18,6 +18,7 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.command.ConfigCommand;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import java.io.File;
 import java.io.IOException;
@@ -109,7 +110,12 @@ public class EventHandlerRegister {
 
 
     private static CompletableFuture<Suggestions> removeQuestSuggestions(final CommandContext<CommandSourceStack> ctx, final SuggestionsBuilder builder) {
-        Player player = ctx.getSource().getPlayer();
+        Player player = null;
+
+        try {
+            player = ctx.getSource().getPlayerOrException();
+        } catch (CommandSyntaxException e) {}
+
         List<File[]> questsFile = new ArrayList<>();
 
         Path userFolder = QuestApiMain.getUserFolder(player.getUUID());
@@ -133,7 +139,12 @@ public class EventHandlerRegister {
     }
 
     private static CompletableFuture<Suggestions> trackedQuestSuggestions(final CommandContext<CommandSourceStack> ctx, final SuggestionsBuilder builder) {
-        Player player = ctx.getSource().getPlayer();
+        Player player = null;
+
+        try {
+            player = ctx.getSource().getPlayerOrException();
+        } catch (CommandSyntaxException e) {}
+        
         Path userFolder = QuestApiMain.getUserFolder(player.getUUID());
 
         File[] questList = QuestApiMain.getActiveQuest(userFolder).toFile().listFiles();
@@ -146,7 +157,11 @@ public class EventHandlerRegister {
     }
 
     private static CompletableFuture<Suggestions> addQuestSuggestions(final CommandContext<CommandSourceStack> ctx, final SuggestionsBuilder builder) {
-        Player player = ctx.getSource().getPlayer();
+        Player player = null;
+
+        try {
+            player = ctx.getSource().getPlayerOrException();
+        } catch (CommandSyntaxException e) {}
 
         File[] questsFile = serverQuests.toFile().listFiles();
 

@@ -22,7 +22,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -107,7 +107,7 @@ public class QuestLog extends AbstractQuestLog {
                 Button questSelect = new TextButton(
                         xButtonPosition, yButtonPosition, (int) buttonWidth, 20 * (textLines + 1), buttonScale,
 
-                        Component.literal(title), 26,
+                        new TextComponent(title), 26,
                         button -> SendQuestPacket.TO_SERVER(new RequestQuestTracked(questList.get(buttonIndex).getId())));
 
                 //If is not first button added, checks if prevButton has 1 or more lines to add an extra indent
@@ -132,7 +132,7 @@ public class QuestLog extends AbstractQuestLog {
             }
         }
 
-        Button prevPage =  MCUtilClient.createButton((int) (xScreenPos - (imageWidth / 5.5)), (int) (yScreenPos + imageHeight * 0.85), width / 25, width / 30, Component.literal(""), button -> {
+        Button prevPage =  MCUtilClient.createButton((int) (xScreenPos - (imageWidth / 5.5)), (int) (yScreenPos + imageHeight * 0.85), width / 25, width / 30, new TextComponent(""), button -> {
             if (selectedPage > 0) {
                 selectedPage--;
 
@@ -141,14 +141,14 @@ public class QuestLog extends AbstractQuestLog {
         });
         
         
-        Button nextPage =  MCUtilClient.createButton((int) (xScreenPos - (imageWidth / 9)), (int) (yScreenPos + imageHeight * 0.85), width / 25, width / 30, Component.literal(""), button -> {
+        Button nextPage =  MCUtilClient.createButton((int) (xScreenPos - (imageWidth / 9)), (int) (yScreenPos + imageHeight * 0.85), width / 25, width / 30, new TextComponent(""), button -> {
             if (selectedPage + 1 < Math.ceil(questList.size()) / 4) {
                 selectedPage++;
 
                 init();
             }
         });
-        textButton = new EditBox(font, (int) (xScreenPos - (imageWidth / 2.4)), (int) (yScreenPos + imageHeight * 0.75), width / 6, 10, Component.literal(""));
+        textButton = new EditBox(font, (int) (xScreenPos - (imageWidth / 2.4)), (int) (yScreenPos + imageHeight * 0.75), width / 6, 10, new TextComponent(""));
 
         addRenderableWidget(textButton);
         addWidget(prevPage);
@@ -258,7 +258,7 @@ public class QuestLog extends AbstractQuestLog {
             List<UserGoal> questGoalList = entry.getValue();
 
             //Render quest type
-            MCUtilClient.renderLine(poseStack, 30, 0, 0, 10, Component.literal(I18n.get("tracker.questapi.quest_type") +
+            MCUtilClient.renderLine(poseStack, 30, 0, 0, 10, new TextComponent(I18n.get("tracker.questapi.quest_type") +
                     I18n.get("quest_type.questapi." + questGoalList.get(0).getType().toLowerCase())).withStyle(ChatFormatting.BLACK), font);
 
             //Render each quest goal of a single type and render target

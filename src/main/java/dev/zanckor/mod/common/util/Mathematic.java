@@ -1,7 +1,7 @@
 package dev.zanckor.mod.common.util;
 
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
+import java.util.Random;
 import net.minecraft.world.phys.Vec3;
 import org.apache.commons.lang3.Range;
 import org.joml.Matrix4f;
@@ -10,6 +10,7 @@ import org.lwjgl.BufferUtils;
 import java.nio.FloatBuffer;
 
 public class Mathematic {
+    private static final Random random = new Random();
     public static boolean numberBetween(double number, double min, double max) {
         Range<Double> range = Range.between(min, max);
 
@@ -25,7 +26,7 @@ public class Mathematic {
     }
 
     public static int numberRandomizerBetween(int min, int max) {
-        int randomizer = (int) Mth.randomBetween(RandomSource.createNewThreadLocalInstance(), min, max);
+        int randomizer = (int) Mth.randomBetween(random, min, max);
         return randomizer;
     }
 

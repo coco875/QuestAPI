@@ -12,7 +12,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.resources.language.I18n;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
@@ -45,27 +45,27 @@ public class QuestDefaultScreen extends AbstractContainerScreen<QuestMakerMenu> 
         scale = ((float) width) / 750;
 
         //Add buttons for different selection of data, quests, requirements...
-        Button goalScreen =  MCUtilClient.createButton(xPosition, (int) (yPosition * 0.4), 40, 20, Component.literal("Goals"),
+        Button goalScreen =  MCUtilClient.createButton(xPosition, (int) (yPosition * 0.4), 40, 20, new TextComponent("Goals"),
                 onPress -> {
                     if (editingQuest != null) {
 
                         onSaveButtonPress();
-                        Minecraft.getInstance().setScreen(new QuestGoalSelectorScreen(menu, inventory, editingQuest, Component.literal("quest_goal_selector")));
+                        Minecraft.getInstance().setScreen(new QuestGoalSelectorScreen(menu, inventory, editingQuest, new TextComponent("quest_goal_selector")));
                     }
                 });
 
         addRenderableWidget(goalScreen);
 
         //Add buttons for save and edit actual quest
-        idBox = new EditBox(font, (int) (xPosition / 1.15), (int) (yPosition / 1.5), width / 90 * 20, width / 90, Component.literal(""));
-        titleBox = new EditBox(font, (int) (xPosition / 1.15), (int) (yPosition / 1.3), width / 90 * 20, width / 90, Component.literal(""));
-        timeLimitBox = new EditBox(font, (int) (xPosition / 1.07), (int) (yPosition / 1.1), width / 90 * 17, width / 90, Component.literal(""));
+        idBox = new EditBox(font, (int) (xPosition / 1.15), (int) (yPosition / 1.5), width / 90 * 20, width / 90, new TextComponent(""));
+        titleBox = new EditBox(font, (int) (xPosition / 1.15), (int) (yPosition / 1.3), width / 90 * 20, width / 90, new TextComponent(""));
+        timeLimitBox = new EditBox(font, (int) (xPosition / 1.07), (int) (yPosition / 1.1), width / 90 * 17, width / 90, new TextComponent(""));
         addRenderableWidget(idBox);
         addRenderableWidget(titleBox);
         addRenderableWidget(timeLimitBox);
 
         TextButton saveButton = new TextButton((int) (xPosition * 1.35), (int) (yPosition * 1.3), 20, 20, scale,
-                Component.literal("SAVE"), 14,
+                new TextComponent("SAVE"), 14,
                 onPress -> onSaveButtonPress());
 
         addRenderableWidget(saveButton);
@@ -84,7 +84,7 @@ public class QuestDefaultScreen extends AbstractContainerScreen<QuestMakerMenu> 
             int linesOffSet = lines * 20;
 
             TextButton textButton = new TextButton((int) (xPosition / 1.9), (int) (yPosition / 1.3) + buttonYOffSet.get(), 80, lines * 20, scale,
-                    Component.literal(questTitle), 14,
+                    new TextComponent(questTitle), 14,
                     onPress -> {
                         onQuestButtonPress(quest);
                     });

@@ -12,7 +12,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.resources.language.I18n;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Player;
 
@@ -85,7 +85,7 @@ public class RenderQuestTracker extends AbstractQuestTracked {
         }
 
         MCUtilClient.renderLine(poseStack, (int) xPosition, (int) yPosition, 20,
-                Component.literal(I18n.get("tracker.questapi.quest") + title).withStyle(ChatFormatting.WHITE), minecraft.font);
+                new TextComponent(I18n.get("tracker.questapi.quest") + title).withStyle(ChatFormatting.WHITE), minecraft.font);
     }
 
     public static void renderQuestType(PoseStack poseStack, Minecraft minecraft, HashMap<String, List<UserGoal>> userQuestHashMap) {
@@ -99,7 +99,7 @@ public class RenderQuestTracker extends AbstractQuestTracked {
 
             //Render quest type
             MCUtilClient.renderLine(poseStack, Integer.MAX_VALUE, xPosition, yPosition, 10,
-                    Component.literal(I18n.get("tracker.questapi.quest_type") +
+                    new TextComponent(I18n.get("tracker.questapi.quest_type") +
                             I18n.get("quest_type.questapi." + questGoalList.get(0).getType().toLowerCase())).withStyle(ChatFormatting.WHITE), font);
 
             //Render each quest goal of a single type and render target

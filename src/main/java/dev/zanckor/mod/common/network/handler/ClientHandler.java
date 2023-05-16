@@ -13,7 +13,7 @@ import dev.zanckor.mod.common.util.Timer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.toasts.SystemToast;
 import net.minecraft.client.resources.language.I18n;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
@@ -44,7 +44,7 @@ public class ClientHandler {
             title = I18n.get("quest_name.questapi." + questTitle.substring(1));
         }
 
-        SystemToast.add(Minecraft.getInstance().getToasts(), SystemToast.SystemToastIds.PERIODIC_NOTIFICATION, Component.literal("Quest Completed"), Component.literal(title));
+        SystemToast.add(Minecraft.getInstance().getToasts(), SystemToast.SystemToastIds.PERIODIC_NOTIFICATION, new TextComponent("Quest Completed"), new TextComponent(title));
 
         MCUtilClient.playSound(SoundEvents.NOTE_BLOCK_PLING.get(), 1, 2);
     }

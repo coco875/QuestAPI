@@ -19,12 +19,15 @@ import dev.zanckor.mod.common.util.GsonManager;
 import dev.zanckor.mod.common.util.Timer;
 import dev.zanckor.mod.server.menu.questmaker.QuestMakerMenu;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkHooks;
+import net.minecraft.server.level.ServerPlayer;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import java.io.File;
 import java.io.FileReader;
@@ -69,7 +72,7 @@ public class QuestCommand {
         Path userFolder = Paths.get(playerData.toString(), player.getUUID().toString());
 
         if (Files.exists(Paths.get(getCompletedQuest(userFolder).toString(), quest)) || Files.exists(Paths.get(getActiveQuest(userFolder).toString(), quest)) || Files.exists(Paths.get(getUncompletedQuest(userFolder).toString(), quest))) {
-            context.getSource().sendFailure(Component.literal("Player " + player.getScoreboardName() + " with UUID " + playerUUID + " already completed/has this quest"));
+            context.getSource().sendFailure(new TextComponent("Player " + player.getScoreboardName() + " with UUID " + playerUUID + " already completed/has this quest"));
             return 0;
         }
 
@@ -135,11 +138,15 @@ public class QuestCommand {
 
 
     public static int openQuestMaker(CommandContext<CommandSourceStack> context){
-        SimpleMenuProvider menuProvider =
-                new SimpleMenuProvider((id, inventory, p) -> new QuestMakerMenu(id), Component.literal("quest_default_menu"));
+        MenuProvider menuProvider =
+                new SimpleMenuProvider((id, inventory, p) -> new QuestMakerMenu(id), new TextComponent("quest_default_menu"));
+        ServerPlayer player = null;
 
-        SendQuestPacket.TO_CLIENT(context.getSource().getPlayer(), new ServerQuestList());
-        NetworkHooks.openScreen(context.getSource().getPlayer(), menuProvider);
+        try {
+            player = context.getSource().getPlayerOrException();
+        } catch (CommandSyntaxException e) {}
+        SendQuestPacket.TO_CLIENT(player, new ServerQuestList());
+        NetworkHooks.openScreen(player, menuProvider);
         return 1;
     }
 }

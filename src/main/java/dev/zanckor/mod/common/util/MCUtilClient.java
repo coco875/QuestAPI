@@ -17,13 +17,13 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.sounds.SoundManager;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
+import net.minecraft.util.Random;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -49,7 +49,7 @@ public class MCUtilClient {
     public static List<List<FormattedCharSequence>> splitText(String text, Font font, int textMaxLength) {
         final List<List<FormattedCharSequence>> textBlocks = new ArrayList<>();
 
-        textBlocks.add(font.split(Component.literal(text), textMaxLength));
+        textBlocks.add(font.split(new TextComponent(text), textMaxLength));
 
         return textBlocks;
     }
@@ -58,7 +58,7 @@ public class MCUtilClient {
     public static void playSound(SoundEvent sound, float minPitch, float maxPitch) {
         SoundManager soundManager = Minecraft.getInstance().getSoundManager();
 
-        soundManager.play(SimpleSoundInstance.forUI(sound, Mth.randomBetween(RandomSource.create(), minPitch, maxPitch)));
+        soundManager.play(SimpleSoundInstance.forUI(sound, Mth.randomBetween(Random.create(), minPitch, maxPitch)));
     }
 
     public static void renderLine(PoseStack poseStack, float xPos, float yPos, float textIndent, String text, Font font) {
@@ -96,7 +96,7 @@ public class MCUtilClient {
                     return true;
                 });
 
-                font.draw(poseStack, Component.literal(sb.toString()).withStyle(style), xPos, yPos + (textIndent * (splitIndent)), 0);
+                font.draw(poseStack, new TextComponent(sb.toString()).withStyle(style), xPos, yPos + (textIndent * (splitIndent)), 0);
 
                 splitIndent++;
             }
@@ -193,7 +193,7 @@ public class MCUtilClient {
     }
 
     public static MutableComponent formatString(String text1, String text2, ChatFormatting chatFormatting1, ChatFormatting chatFormatting2) {
-        return Component.literal(text1).withStyle(chatFormatting1).append(Component.literal(text2).withStyle(chatFormatting2));
+        return new TextComponent(text1).withStyle(chatFormatting1).append(new TextComponent(text2).withStyle(chatFormatting2));
     }
 
     public static Entity getEntityByUUID(UUID uuid) {

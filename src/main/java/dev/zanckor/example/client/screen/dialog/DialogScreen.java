@@ -12,7 +12,7 @@ import dev.zanckor.mod.common.network.message.dialogoption.DialogRequestPacket;
 import dev.zanckor.mod.common.network.message.screen.OpenVanillaEntityScreen;
 import dev.zanckor.mod.common.util.MCUtilClient;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
@@ -84,13 +84,13 @@ public class DialogScreen extends AbstractDialog {
             }
 
             addRenderableWidget(new TextButton(xButtonPosition, yButtonPosition, stringLength, 20,  ((float) width) / 675,
-                    Component.literal(optionStrings.get(i).get(0)), 26, button -> button(index, dialogID)));
+                    new TextComponent(optionStrings.get(i).get(0)), 26, button -> button(index, dialogID)));
 
             xButtonPosition += optionStrings.get(i).get(0).length() * 5.7 + 20;
         }
 
         addRenderableWidget(new TextButton((int) (imageWidth * 1.4), (int) (imageHeight * 1.1), 20, 20,  ((float) width) / 300,
-                Component.literal("↩"), 26, button -> SendQuestPacket.TO_SERVER(new OpenVanillaEntityScreen(npcUUID))));
+                new TextComponent("↩"), 26, button -> SendQuestPacket.TO_SERVER(new OpenVanillaEntityScreen(npcUUID))));
     }
 
     @Override

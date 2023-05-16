@@ -146,13 +146,13 @@ public class ServerEvent {
         }
 
 
-        SendQuestPacket.TO_CLIENT(e.getEntity(), new ValidNPCMarker());
-        SendQuestPacket.TO_CLIENT(e.getEntity(), new ActiveQuestList(e.getEntity().getUUID()));
+        SendQuestPacket.TO_CLIENT(e.getPlayer(), new ValidNPCMarker());
+        SendQuestPacket.TO_CLIENT(e.getPlayer(), new ActiveQuestList(e.getEntity().getUUID()));
     }
 
     @SubscribeEvent
     public static void loadDialogPerEntityType(PlayerInteractEvent.EntityInteract e) throws IOException {
-        Player player = e.getEntity();
+        Player player = e.getPlayer();
         Entity target = e.getTarget();
         String targetEntityType = EntityType.getKey(target.getType()).toString();
 
@@ -173,7 +173,7 @@ public class ServerEvent {
 
     @SubscribeEvent
     public static void loadDialogPerCompoundTag(PlayerInteractEvent.EntityInteract e) throws IOException {
-        Player player = e.getEntity();
+        Player player = e.getPlayer();
         Entity target = e.getTarget();
         List<String> dialogs = new ArrayList<>();
 
